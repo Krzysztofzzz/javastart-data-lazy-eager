@@ -55,7 +55,7 @@ public class Category {
         this.auctions = auctions;
     }
 
-    void addAuction(Auction auction) {
+    public void addAuction(Auction auction) {
         auctions.add(auction);
     }
 
