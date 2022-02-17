@@ -4,12 +4,10 @@ import com.javastart.entities.Auction;
 import com.javastart.entities.Category;
 import com.javastart.repositories.AuctionRepository;
 import com.javastart.repositories.CategoryRepository;
+import com.javastart.services.CategoryService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import java.util.List;
-import java.util.Optional;
 
 @SpringBootApplication
 public class JavastartDataLazyEagerApplication {
@@ -19,8 +17,9 @@ public class JavastartDataLazyEagerApplication {
         AuctionRepository auctionRepository = context.getBean(AuctionRepository.class);
         CategoryRepository categoryRepository = context.getBean(CategoryRepository.class);
         saveData(auctionRepository, categoryRepository);
-        printCategoryAvgAuctionPrice(1L, categoryRepository);
-        printCategoryAvgAuctionPrice(2L, categoryRepository);
+        CategoryService categoryService = context.getBean(CategoryService.class);
+        categoryService.getAvgPriceForCategory(1L)
+                .ifPresent(avgPrice -> System.out.println("Średnia cena kategorii to " + avgPrice));
     }
 
     private static void saveData(AuctionRepository auctionRepository, CategoryRepository categoryRepository) {
@@ -35,19 +34,6 @@ public class JavastartDataLazyEagerApplication {
         category1.addAuction(auction2);
         category1.addAuction(auction3);
         categoryRepository.save(category1);
-    }
-
-    private static void printCategoryAvgAuctionPrice(Long categoryId, CategoryRepository categoryRepository) {
-        Optional<Category> category = categoryRepository.findById(categoryId);
-        if (category.isPresent()) {
-            Category existingCategory = category.get();
-            List<Auction> auctions = existingCategory.getAuctions();
-            double priceSum = auctions.stream().mapToDouble(Auction::getBuyNowPrice).sum();
-            double avgPrice = priceSum / auctions.size();
-            System.out.printf("Średnia cena w kategorii %s to %.2f\n", existingCategory.getName(), avgPrice);
-        } else {
-            System.out.println("Brak kategorii o wskazanym id");
-        }
     }
 
 }
