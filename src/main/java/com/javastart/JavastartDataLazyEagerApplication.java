@@ -17,8 +17,7 @@ public class JavastartDataLazyEagerApplication {
         AuctionRepository auctionRepository = context.getBean(AuctionRepository.class);
         CategoryRepository categoryRepository = context.getBean(CategoryRepository.class);
         saveData(auctionRepository, categoryRepository);
-        CategoryService categoryService = context.getBean(CategoryService.class);
-        categoryService.getAvgPriceForCategory(1L)
+        categoryRepository.getAvgPriceForCategory(1L)
                 .ifPresent(avgPrice -> System.out.println("Średnia cena kategorii to " + avgPrice));
     }
 
