@@ -12,7 +12,7 @@ public class Category {
     private Long id;
     private String name;
     private String description;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Auction> auctions = new ArrayList<>();
 
     public Category() {
