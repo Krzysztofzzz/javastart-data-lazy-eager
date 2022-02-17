@@ -16,6 +16,7 @@ public class JavastartDataLazyEagerApplication {
         saveData(categoryRepository);
         categoryRepository.getAvgPriceForCategory(1L)
                 .ifPresent(avgPrice -> System.out.println("Średnia cena kategorii to " + avgPrice));
+        removeCategoryById(categoryRepository, 1L);
     }
 
     private static void saveData(CategoryRepository categoryRepository) {
@@ -27,6 +28,11 @@ public class JavastartDataLazyEagerApplication {
         category1.addAuction(auction2);
         category1.addAuction(auction3);
         categoryRepository.save(category1);
+    }
+
+    private static void removeCategoryById(CategoryRepository categoryRepository, long categoryId) {
+        categoryRepository.findById(categoryId)
+                .ifPresent(categoryRepository::delete);
     }
 
 }
